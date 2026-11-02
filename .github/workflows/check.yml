@@ -8,6 +8,7 @@ jobs:
       - name: Shell and manifest sanity
         run: |
           sh -n scripts/*.sh
+          if EXPECTED_COMMIT=invalid sh scripts/deploy.sh; then exit 1; fi
           awk 'NF != 2 || $1 !~ /^[0-9a-f]+$/ || length($1) != 64 {exit 1} END {if (NR != 2) exit 1}' models.sha256
           grep -q '<bl4000-lan-ip>' systemd/deepdoc-llm-4b.service
           grep -q '<bl4000-lan-ip>' systemd/deepdoc-llm-14b.service
