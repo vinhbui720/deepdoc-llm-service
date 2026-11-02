@@ -1,0 +1,15 @@
+[Unit]
+Description=DeepDoc Qwen3-14B LAN inference
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/prt-llm-14b
+ExecStart=%h/prt-llm-bench/build/bin/llama-server -m %h/DeepDoc/models/Qwen3-14B-Q4_K_M.gguf --host <bl4000-lan-ip> --port 18444 -ngl 99 -c 40960 -np 1 --no-webui --api-key-file tls/api.key --ssl-key-file tls/srv.key --ssl-cert-file tls/srv.crt
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

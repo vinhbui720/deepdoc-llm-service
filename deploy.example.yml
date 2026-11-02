@@ -1,0 +1,8 @@
+# INACTIVE TEMPLATE. No deployment workflow or runner configured.
+# After GitHub runner approval: provision dedicated self-hosted runner, restrict
+# environment approvals and repo access, and install reviewed units manually.
+# Never store TLS private keys, API token, models, or binaries in repository/artifacts.
+runner_labels: [self-hosted, bl4000]
+manual_approval_required: true
+service_user: <service-user>
+lan_ip: <bl4000-lan-ip>

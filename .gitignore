@@ -1,0 +1,35 @@
+# Models, weights, datasets, binaries
+*.gguf
+*.ggml
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.bin
+*.h5
+*.hdf5
+*.parquet
+*.arrow
+*.sqlite*
+models/
+data/
+datasets/
+build/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.crt
+*.cert
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.token
+*credentials*
+*secret*
+tls/

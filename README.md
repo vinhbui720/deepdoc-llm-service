@@ -1,0 +1,15 @@
+# deepdoc-llm-service
+
+Independent local git repository; no model, llama.cpp binary, token, or certificate included. Units derived from `deploy/bl4000-llm` as sanitized templates. Nothing installed or deployed by this repository.
+
+## Model acquisition
+
+Download `Qwen3-4B-Q4_K_M.gguf` or `Qwen3-14B-Q4_K_M.gguf` from a trusted publisher to a temporary path. Source URL and revision are **not pinned yet**: establish and review exact upstream repo, revision, license, and URL before download. Do not trust a matching filename alone. Compare downloaded file with `models.sha256` using `scripts/verify-model.sh 4b /path/to/Qwen3-4B-Q4_K_M.gguf` (or `14b`). Digests inherited from read-only deployment notes; independently confirm against trusted provenance before production. Never run unverified downloads. Place verified models under `~/DeepDoc/models/` (or customize model paths in both units and set `DEEPDOC_MODEL_DIR` for the switch script). Model directory is outside Git. The live bl4000 installation still uses legacy paths; these templates are for new installations, not drop-in replacements.
+
+## Manual setup (not performed)
+
+Build compatible CUDA llama.cpp at `~/prt-llm-bench/build` from reviewed source; reference deployment reports commit `dde879bc4`, build 12032 (`0.8.0-dev`), but toolchain/CUDA and source pin remain unverified. Keep TLS key/cert and API token outside git in each service working directory's `tls/` with restrictive permissions. Substitute `<bl4000-lan-ip>` in both units before install; inspect paths and flags. Install as user units `deepdoc-llm-4b.service` and `deepdoc-llm-14b.service`, then `systemctl --user daemon-reload`. Do not enable both. Existing live units may use other names: identify and stop them first; script cannot manage unknown services or raw `llama-server` processes.
+
+`sh scripts/switch-model.sh 4b` (or `14b`) checks model SHA256, checks both installed units, stops both known units, confirms neither remains active, then starts one. This causes downtime; failed start attempts to restore previously active other unit; if rollback fails, both remain stopped. Before switching, confirm no other server owns GPU/port and inspect `systemctl --user status` and logs. TLS endpoints: 4B port 18443, 14B port 18444. Cert trust and Bearer token distribution remain operator tasks.
+
+CI runs shell syntax and manifest/template sanity only. `deploy.example.yml` is inert, pending approved GitHub runner, restricted environment, secret provisioning, and deployment design. No runner deploy job exists.

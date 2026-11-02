@@ -1,0 +1,13 @@
+name: static checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell and manifest sanity
+        run: |
+          sh -n scripts/*.sh
+          awk 'NF != 2 || $1 !~ /^[0-9a-f]+$/ || length($1) != 64 {exit 1} END {if (NR != 2) exit 1}' models.sha256
+          grep -q '<bl4000-lan-ip>' systemd/deepdoc-llm-4b.service
+          grep -q '<bl4000-lan-ip>' systemd/deepdoc-llm-14b.service
